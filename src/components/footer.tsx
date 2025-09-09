@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function Footer() {
     return(
-        <footer className="w-full bg-violet-500 py-8">
+        <footer className="w-full bg-violet-600 py-8">
             <div className="container mx-auto px-4 text-center">
                 <div className="flex justify-center items-center flex-wrap gap-4 mb-4">
-                    <Link href="/home" className="text-gray-100 hover:text-violet-900">Início</Link>
+                    <Link href="/" className="text-gray-100 hover:text-violet-900">Início</Link>
                     <Link href="/empresa" className="text-gray-100 hover:text-violet-900">Empresa</Link>
                     <Link href="/servicos" className="text-gray-100 hover:text-violet-900">Serviços</Link>
                     <Link href="/contato" className="text-gray-100 hover:text-violet-900">Contato</Link>

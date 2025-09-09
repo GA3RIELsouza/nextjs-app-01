@@ -1,7 +1,11 @@
+import ContactForm from "@/components/layout/contactlayout/contactform";
+import ContactSection from "@/components/layout/contactlayout/contactsection";
+
 export default function Contact() {
     return(
         <>
-            <h1>Hello, World!</h1>
+            <ContactSection />
+            <ContactForm />
         </>
     );
 }
