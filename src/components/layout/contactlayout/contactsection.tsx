@@ -1,6 +1,6 @@
 export default function ContactSection() {
     return(
-        <section className="w-full py-20">
+        <section className="w-full pt-20">
             <div className="container mx-autio px-4 text-center">
                 <h2 className="text-3xl font-bold mb-4">
                     Fale conosco

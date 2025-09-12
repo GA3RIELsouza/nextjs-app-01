@@ -17,3 +17,16 @@ npm install imask
 ```bash
 npm install zod
 ```
+
+# Instalar React Hook Form
+```bash
+npm install react-hook-form
+```
+# Instalar Resolvers do React Hook
+```bash
+npm install @hookform/resolvers
+```
+# Instalar React iMask
+```bash
+npm install react-imask
+```
