@@ -1,27 +1,25 @@
-import { ErrorOption } from "react-hook-form";
-
 type ValidCpfResponseData = {
     Valid: boolean
     CPF: string
     Status: string
-}
+};
 
-const baseUrl = "https://api-cpf.vercel.app/cpf/valid/";
+const BASE_URL = "https://api-cpf.vercel.app/";
 
 export async function handleValidateCpf(cpf: string): Promise<String | null> {
     const cleanCpf = cpf.replace(/\D/g, "");
 
-    if (cleanCpf.length != 11) {
+    if (cleanCpf.length !== 11) {
         return "CPF inválido.";
     }
 
     let data: ValidCpfResponseData | null = null;
 
     try {
-        const response = await fetch(`${baseUrl}${cleanCpf}`);
+        const response = await fetch(`${BASE_URL}cpf/valid/${cleanCpf}`);
         data = await response.json();
     } catch (error: unknown) {
-        console.log(`Couldn't fetch from ${baseUrl}.`);
+        console.log(`Couldn't fetch from ${BASE_URL}.`);
 
         if (error instanceof Error) {
             console.log(error.message);

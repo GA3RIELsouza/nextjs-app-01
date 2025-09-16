@@ -1,36 +1,17 @@
-"use client"
+"use client";
 
 import { MapPin } from "lucide-react";
-import { ContactFormData, contactFormSchema } from "@/lib/validator/formvalidator";
 import { CEP_MASK } from "@/lib/mask/formmask";
-import { useForm, Controller, ErrorOption } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { handleValidateCep } from "@/lib/service/api/apicep";
+import { ValidCepResponseData, handleValidateCep } from "@/lib/service/api/apicep";
+import type { FormComponentProps } from "@/components/layout/contactlayout/contactsection";
 
-export default function AddressForm() {
-    const {
-        handleSubmit, setError, control, formState: { errors, isSubmitting }
-    } = useForm<ContactFormData>({
-        resolver: zodResolver(contactFormSchema),
-        defaultValues: {
-            zipCode: "",
-            street: "",
-            neighborhood: "",
-            location: "",
-            state: ""
-        }
-    });
-
-    const handleSubmitContact = (data: ContactFormData) => {
-        console.log("Dados enviados com sucesso!", data);
-        return new Promise((resolve) => setTimeout(resolve, 2000));
-    }
+export default function AddressForm({ control, formState, setValue, setError }: FormComponentProps) {
+    const { errors } = formState;
 
     return(
-        <form
-            className="flex flex-col gap-5 bg-white p-8 rounded-lg shadow-md w-full max-w-lg mx-auto my-10"
-            onSubmit={handleSubmit(handleSubmitContact)}>
+        <>
             <div>
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="zipCode">
                     CEP
@@ -47,10 +28,17 @@ export default function AddressForm() {
                                 id="zipCode"
                                 {...field}
                                 onBlur={async (e) => {
-                                    const message = await handleValidateCep(e.currentTarget.value);
+                                    const response = await handleValidateCep(e.currentTarget.value);
                                     
-                                    if (typeof(message) === "string") {
-                                        setError("cpf", {message});
+                                    if (typeof(response) === "string") {
+                                        setError("zipCode", {message: response});
+                                    } else {
+                                        const data = response as ValidCepResponseData;
+                                        
+                                        setError("zipCode", {});
+                                        setValue("street", data.logradouro);
+                                        setValue("neighborhood", data.bairro);
+                                        setValue("state", data.estado);
                                     }
                                 }}
                                 mask={CEP_MASK}
@@ -143,8 +131,6 @@ export default function AddressForm() {
                     <p className="mt-2 text-sm text-red-700">{errors.state.message}</p>
                 )}
             </div>
-
-            <input type="submit" value="Enviar" className="w-full bg-violet-800 text-white b-lg rounded-md p-2 cursor-pointer" />
-        </form>
+        </>
     )
 }

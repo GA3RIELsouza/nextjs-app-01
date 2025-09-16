@@ -30,3 +30,13 @@ npm install @hookform/resolvers
 ```bash
 npm install react-imask
 ```
+
+# Instalar Firebase
+```bash
+npm install firebase
+```
+
+# Instalar React Hot Toast
+```bash
+npm install react-hot-toast
+```

@@ -1,36 +1,17 @@
-"use client"
+"use client";
 
 import { IdCard, Mail, MessageSquare, Phone, User } from "lucide-react";
-import { ContactFormData, contactFormSchema } from "@/lib/validator/formvalidator";
 import { CPF_MASK, PHONE_MASK } from "@/lib/mask/formmask";
-import { useForm, Controller, ErrorOption } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import { handleValidateCpf } from "@/lib/service/api/apicpf";
+import type { FormComponentProps } from "@/components/layout/contactlayout/contactsection";
 
-export default function ContactForm() {
-    const {
-        handleSubmit, setError, control, formState: { errors, isSubmitting }
-    } = useForm<ContactFormData>({
-        resolver: zodResolver(contactFormSchema),
-        defaultValues: {
-            name: "",
-            cpf: "",
-            email: "",
-            phone: "",
-            message: ""
-        }
-    });
-
-    const handleSubmitContact = (data: ContactFormData) => {
-        console.log("Dados enviados com sucesso!", data);
-        return new Promise((resolve) => setTimeout(resolve, 2000));
-    }
+export default function ContactForm({ control, formState, setError }: FormComponentProps) {
+    const { errors } = formState;
 
     return(
-        <form
-            className="flex flex-col gap-5 bg-white p-8 rounded-lg shadow-md w-full max-w-lg mx-auto my-10"
-            onSubmit={handleSubmit(handleSubmitContact)}>
+        <>
             <div>
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
                     Nome
@@ -73,10 +54,13 @@ export default function ContactForm() {
                                 id="cpf"
                                 {...field}
                                 onBlur={async (e) => {
-                                    const message = await handleValidateCpf(e.currentTarget.value);
-                                    
-                                    if (typeof(message) === "string") {
+                                    const response = await handleValidateCpf(e.currentTarget.value);
+
+                                    if (typeof(response) === "string") {
+                                        var message = response as string;
                                         setError("cpf", {message});
+                                    } else {
+                                        setError("cpf", {});
                                     }
                                 }}
                                 mask={CPF_MASK}
@@ -170,8 +154,6 @@ export default function ContactForm() {
                     <p className="mt-2 text-sm text-red-700">{errors.message.message}</p>
                 )}
             </div>
-
-            <input type="submit" value="Enviar" className="w-full bg-violet-800 text-white b-lg rounded-md p-2 cursor-pointer" />
-        </form>
+        </>
     )
 }
